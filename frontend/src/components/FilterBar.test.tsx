@@ -35,7 +35,7 @@ describe('FilterBar', () => {
   it('emits filter change immediately when event type is selected', async () => {
     const { onChange } = renderFilterBar()
 
-    await userEvent.selectOptions(screen.getByLabelText(/event type/i), 'user.login')
+    await userEvent.selectOptions(screen.getByLabelText(/^type$/i), 'user.login')
     expect(onChange).toHaveBeenCalledWith({ ...EMPTY, eventType: 'user.login' })
   })
 

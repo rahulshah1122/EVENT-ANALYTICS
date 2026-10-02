@@ -5,8 +5,7 @@ import type {
   PaginatedResponse,
   Event,
 } from '../types/event'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api'
+import { ENDPOINTS } from './endpoints'
 
 export class ApiError extends Error {
   code: string
@@ -28,8 +27,8 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+async function request<T>(url: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(url, {
     headers: { 'Content-Type': 'application/json' },
     ...init,
   })
@@ -68,9 +67,9 @@ export function fetchEvents(
   filters: Partial<EventFilters>,
 ): Promise<PaginatedResponse<Event>> {
   const qs = buildEventsQueryString(filters)
-  return request<PaginatedResponse<Event>>(`/events${qs ? `?${qs}` : ''}`)
+  return request<PaginatedResponse<Event>>(`${ENDPOINTS.events}${qs ? `?${qs}` : ''}`)
 }
 
 export function fetchAnalytics(hours = 24): Promise<AnalyticsResponse> {
-  return request<AnalyticsResponse>(`/events/analytics?hours=${hours}`)
+  return request<AnalyticsResponse>(`${ENDPOINTS.analytics}?hours=${hours}`)
 }

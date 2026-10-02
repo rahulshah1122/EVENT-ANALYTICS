@@ -69,12 +69,14 @@ export function AnalyticsCard({ data, isLoading, isError }: Props) {
             <p className="text-3xl font-semibold tabular-nums tracking-tight text-slate-900">
               {data.total_events.toLocaleString()}
             </p>
-            <p className="mt-0.5 text-xs text-slate-500">events in window</p>
+            <p className="mt-0.5 text-xs text-slate-500">
+              Events In The Last {data.window_hours}h
+            </p>
           </div>
 
           <div>
             <h3 className="mb-2 text-xs font-medium text-slate-500">
-              Top event types
+              Top Event Types
             </h3>
             <div className="h-48 w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -91,7 +93,7 @@ export function AnalyticsCard({ data, isLoading, isError }: Props) {
 
           <div>
             <h3 className="mb-2 text-xs font-medium text-slate-500">
-              Hourly timeline
+              Events per hour
             </h3>
             <div className="h-32 w-full">
               <ResponsiveContainer width="100%" height="100%">

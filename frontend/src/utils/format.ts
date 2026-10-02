@@ -1,6 +1,21 @@
 import type { EventPayload } from '../types/event'
 
-const WORDS_TO_UPPERCASE = new Set(['id', 'url', 'api', 'ip', 'os', 'ui', 'ux'])
+const WORDS_TO_UPPERCASE = new Set([
+  'id',
+  'url',
+  'api',
+  'ip',
+  'os',
+  'ui',
+  'ux',
+  'cta',
+  'sso',
+  'http',
+  'https',
+  'usd',
+  'eur',
+  'gbp',
+])
 
 function toTitleCase(text: string): string {
   return text
