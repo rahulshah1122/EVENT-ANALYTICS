@@ -95,6 +95,31 @@ def test_list_search_matches_payload_and_user_id(client):
     assert response.data["count"] == 1
 
 
+def test_list_search_matches_event_type(client):
+    make_event(event_type="page.view")
+    make_event(event_type="user.login")
+
+    response = client.get(reverse("events-list-create"), {"search": "page.view"})
+    assert response.status_code == 200
+    assert response.data["count"] == 1
+
+
+def test_list_search_accepts_cleaned_display_forms(client):
+    # user types what they see: "User 31" should match user_id "user_31"
+    make_event(user_id="user_31")
+    make_event(user_id="user_7")
+
+    response = client.get(reverse("events-list-create"), {"search": "User 31"})
+    assert response.status_code == 200
+    assert response.data["count"] == 1
+
+    # "Page View" should match event_type "page.view"
+    make_event(event_type="page.view")
+    response = client.get(reverse("events-list-create"), {"search": "Page View"})
+    assert response.status_code == 200
+    assert response.data["count"] == 1
+
+
 def test_list_newest_first(client):
     now = timezone.now()
     older = make_event(timestamp=now - timedelta(hours=2))

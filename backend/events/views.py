@@ -64,7 +64,7 @@ class EventListCreateView(APIView):
             OpenApiParameter(
                 "search",
                 str,
-                description="Case-insensitive substring match on payload or user_id.",
+                description="Case-insensitive substring match on payload, user_id, or event_type.",
             ),
         ],
         responses={200: EventSerializer},

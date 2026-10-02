@@ -71,8 +71,14 @@ def custom_exception_handler(exc, context):
     elif isinstance(response.data, dict) and "detail" in response.data:
         message = str(response.data["detail"])
     else:
-        message = "Request could not be processed."
         details = response.data if isinstance(response.data, (dict, list)) else {}
+        message = "Request could not be processed."
+        # field errors like {"date_from": ["..."]} — surface the first one as
+        # the message so the UI isn't stuck with a generic 400
+        if isinstance(details, dict) and details:
+            field, errs = next(iter(details.items()))
+            first = errs[0] if isinstance(errs, (list, tuple)) and errs else errs
+            message = str(first) if field == "non_field_errors" else f"{field}: {first}"
 
     # APIException subclasses like DuplicateEventError carry their own code
     custom_code = getattr(exc, "default_code", None)

@@ -53,8 +53,19 @@ def apply_event_filters(queryset, params):
 
     search = params.get("search")
     if search:
-        queryset = queryset.annotate(payload_text=Cast("payload", TextField())).filter(
-            Q(payload_text__icontains=search) | Q(user_id__icontains=search)
-        )
+        # accept cleaned forms too: "User 31" -> "user_31", "Page View" -> "page.view"
+        normalized = search.strip().lower()
+        terms = {normalized}
+        for sep in ("_", ".", "-", ":"):
+            terms.add(normalized.replace(" ", sep))
+
+        q = Q()
+        for term in terms:
+            q |= (
+                Q(payload_text__icontains=term)
+                | Q(user_id__icontains=term)
+                | Q(event_type__icontains=term)
+            )
+        queryset = queryset.annotate(payload_text=Cast("payload", TextField())).filter(q)
 
     return queryset
