@@ -1,0 +1,25 @@
+# Root env file (compose) — .env.example is the committed template
+.env
+
+# Python / Django
+backend/venv/
+backend/**/__pycache__/
+*.pyc
+backend/staticfiles/
+backend/.pytest_cache/
+backend/.coverage
+backend/htmlcov/
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/.vite/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+*.log
