@@ -73,3 +73,18 @@ export function fetchEvents(
 export function fetchAnalytics(hours = 24): Promise<AnalyticsResponse> {
   return request<AnalyticsResponse>(`${ENDPOINTS.analytics}?hours=${hours}`)
 }
+
+export interface NewEvent {
+  id: string
+  user_id: string
+  event_type: string
+  payload: Record<string, unknown>
+  timestamp: string
+}
+
+export function createEvent(event: NewEvent): Promise<Event> {
+  return request<Event>(ENDPOINTS.events, {
+    method: 'POST',
+    body: JSON.stringify(event),
+  })
+}

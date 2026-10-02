@@ -8,6 +8,7 @@ import { useAnalytics } from './hooks/useAnalytics'
 import { useEvents } from './hooks/useEvents'
 import { useRateLimit } from './hooks/useRateLimit'
 import type { EventFilters } from './types/event'
+import { trackEvent } from './utils/tracking'
 
 const PAGE_SIZE = 20
 
@@ -51,9 +52,26 @@ function App() {
     return () => clearInterval(interval)
   }, [isLimited, clearIfExpired])
 
+  // emit a real event when the dashboard loads — the feed picks it up on the
+  // next poll, so the pipeline is exercised end to end
+  useEffect(() => {
+    trackEvent('page.view', { page: '/dashboard', source: 'web' })
+  }, [])
+
   const handleFilterChange = (next: FilterValues) => {
     setFilters(next)
     setPage(1)
+    trackEvent('filter.changed', {
+      event_type: next.eventType,
+      search: next.search,
+      date_from: next.dateFrom,
+      date_to: next.dateTo,
+    })
+  }
+
+  const handlePageChange = (nextPage: number) => {
+    setPage(nextPage)
+    trackEvent('feed.page_changed', { page: nextPage })
   }
 
   const lastUpdated = eventsQuery.data ? new Date() : null
@@ -90,7 +108,7 @@ function App() {
               error={eventsQuery.error as Error | null}
               onRetry={() => eventsQuery.refetch()}
               page={page}
-              onPageChange={setPage}
+              onPageChange={handlePageChange}
             />
           </div>
         </div>
