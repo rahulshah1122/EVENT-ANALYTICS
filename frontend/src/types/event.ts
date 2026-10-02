@@ -44,6 +44,8 @@ export interface EventFilters {
   limit: number
   event_type: string
   search: string
+  date_from: string
+  date_to: string
 }
 
 export interface ApiErrorBody {

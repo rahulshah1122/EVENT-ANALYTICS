@@ -13,15 +13,23 @@ const PAGE_SIZE = 20
 
 function App() {
   const [page, setPage] = useState(1)
-  const [filters, setFilters] = useState<FilterValues>({ eventType: '', search: '' })
+  const [filters, setFilters] = useState<FilterValues>({
+    eventType: '',
+    search: '',
+    dateFrom: '',
+    dateTo: '',
+  })
   const rateLimit = useRateLimit()
 
+  // datetime-local values are naive local time — convert to UTC ISO for the API
   const eventFilters: EventFilters = useMemo(
     () => ({
       page,
       limit: PAGE_SIZE,
       event_type: filters.eventType,
       search: filters.search,
+      date_from: filters.dateFrom ? new Date(filters.dateFrom).toISOString() : '',
+      date_to: filters.dateTo ? new Date(filters.dateTo).toISOString() : '',
     }),
     [page, filters],
   )
@@ -51,13 +59,19 @@ function App() {
   const lastUpdated = eventsQuery.data ? new Date() : null
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header lastUpdated={lastUpdated} />
+    <div className="min-h-screen bg-slate-100">
+      <Header lastUpdated={lastUpdated} paused={isLimited} />
 
       <main className="mx-auto flex max-w-6xl flex-col gap-4 p-4 sm:p-6">
         <RateLimitBanner retryAtMs={isLimited ? retryAtMs : null} />
 
-        <FilterBar value={filters} onChange={handleFilterChange} />
+        <FilterBar
+          value={filters}
+          eventTypes={(analyticsQuery.data?.counts_by_type ?? []).map(
+            (row) => row.event_type,
+          )}
+          onChange={handleFilterChange}
+        />
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <div className="lg:col-span-1">

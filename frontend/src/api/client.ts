@@ -59,6 +59,8 @@ export function buildEventsQueryString(
   if (filters.limit) params.set('limit', String(filters.limit))
   if (filters.event_type) params.set('event_type', filters.event_type)
   if (filters.search) params.set('search', filters.search)
+  if (filters.date_from) params.set('date_from', filters.date_from)
+  if (filters.date_to) params.set('date_to', filters.date_to)
   return params.toString()
 }
 

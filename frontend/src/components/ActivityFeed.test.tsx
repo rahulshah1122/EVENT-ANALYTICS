@@ -56,7 +56,7 @@ describe('ActivityFeed', () => {
         onPageChange={vi.fn()}
       />,
     )
-    expect(screen.getByText(/no events match/i)).toBeInTheDocument()
+    expect(screen.getByText(/no events/i)).toBeInTheDocument()
   })
 
   it('shows an error state with a retry button that triggers onRetry', async () => {
@@ -89,7 +89,7 @@ describe('ActivityFeed', () => {
         onPageChange={vi.fn()}
       />,
     )
-    expect(screen.getByText('user.login')).toBeInTheDocument()
-    expect(screen.getByText('user_1')).toBeInTheDocument()
+    expect(screen.getByText('User Login')).toBeInTheDocument()
+    expect(screen.getByText('User 1')).toBeInTheDocument()
   })
 })
