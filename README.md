@@ -56,12 +56,6 @@ Then open http://localhost:3000 — the dashboard talks to the API through the
 Nginx proxy. API docs at http://localhost:8000/api/docs (via compose, the
 backend port isn't published; open http://localhost:3000/api/docs instead).
 
-Seed demo data:
-
-```bash
-docker compose exec backend python manage.py seed_events --count 500
-```
-
 ## Local development
 
 Backend (requires a running Postgres, e.g. `docker compose up db`):

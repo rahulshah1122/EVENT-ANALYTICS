@@ -1,4 +1,4 @@
-.PHONY: test lint test-backend test-frontend lint-backend lint-frontend dev seed
+.PHONY: test lint test-backend test-frontend lint-backend lint-frontend dev
 
 test: test-backend test-frontend
 
@@ -18,6 +18,3 @@ lint-frontend:
 
 dev:
 	docker compose up --build
-
-seed:
-	docker compose exec backend python manage.py seed_events --count 500
